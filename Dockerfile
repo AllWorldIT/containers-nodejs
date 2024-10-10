@@ -19,7 +19,7 @@
 # IN THE SOFTWARE.
 
 
-FROM registry.conarx.tech/containers/alpine/3.20 AS nodejs-builder
+FROM registry.conarx.tech/containers/alpine/edge AS nodejs-builder
 
 
 # LTS - https://nodejs.org/en/about/previous-releases
@@ -121,12 +121,12 @@ RUN set -eux; \
 	du -hs .
 
 
-FROM registry.conarx.tech/containers/alpine/3.20
+FROM registry.conarx.tech/containers/alpine/edge
 
 ARG VERSION_INFO=
 LABEL org.opencontainers.image.authors="Nigel Kukard <nkukard@conarx.tech>"
-LABEL org.opencontainers.image.version="3.20"
-LABEL org.opencontainers.image.base.name="registry.conarx.tech/containers/alpine/3.20"
+LABEL org.opencontainers.image.version="edge"
+LABEL org.opencontainers.image.base.name="registry.conarx.tech/containers/alpine/edge"
 
 # LTS - https://nodejs.org/en/about/previous-releases
 ENV NODEJS_VER=22.9.0
