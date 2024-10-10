@@ -22,6 +22,6 @@
 
 set -e
 
-NODEJS_VERSION=$(grep "ENV NODEJS_VER" Dockerfile | sed -e 's/ENV NODEJS_VER=//')
+NODEJS_VERSION=$(grep "ENV NODEJS_VER" Dockerfile | head -n1 | sed -e 's/ENV NODEJS_VER=//')
 
 export CONTAINER_VERSION_EXTRA="$NODEJS_VERSION"
