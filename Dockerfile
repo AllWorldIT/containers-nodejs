@@ -19,19 +19,12 @@
 # IN THE SOFTWARE.
 
 
-FROM registry.conarx.tech/containers/alpine/3.20
+FROM registry.conarx.tech/containers/alpine/3.20 AS nodejs-builder
 
-
-ARG VERSION_INFO=
-LABEL org.opencontainers.image.authors="Nigel Kukard <nkukard@conarx.tech>"
-LABEL org.opencontainers.image.version="3.20"
-LABEL org.opencontainers.image.base.name="registry.conarx.tech/containers/alpine/3.20"
 
 # LTS - https://nodejs.org/en/about/previous-releases
 ENV NODEJS_VER=22.9.0
 
-ENV FDC_DISABLE_SUPERVISORD=true
-ENV FDC_QUIET=true
 
 # Copy build patches
 #COPY patches build/patches
@@ -72,7 +65,7 @@ RUN set -eux; \
 # Build and install NodeJS
 RUN set -eux; \
 	cd build; \
-	cd node-v${NODEJS_VER}; \
+	cd "node-v${NODEJS_VER}"; \
 # Patching
 #	for i in ../patches/*.patch; do \
 #		echo "Applying patch $i..."; \
@@ -127,8 +120,47 @@ RUN set -eux; \
 			--strip-unneeded; \
 	du -hs .
 
+
+FROM registry.conarx.tech/containers/alpine/3.20
+
+ARG VERSION_INFO=
+LABEL org.opencontainers.image.authors="Nigel Kukard <nkukard@conarx.tech>"
+LABEL org.opencontainers.image.version="3.20"
+LABEL org.opencontainers.image.base.name="registry.conarx.tech/containers/alpine/3.20"
+
+# LTS - https://nodejs.org/en/about/previous-releases
+ENV NODEJS_VER=22.9.0
+
+ENV FDC_DISABLE_SUPERVISORD=true
+ENV FDC_QUIET=true
+
+# Copy in built binaries
+COPY --from=nodejs-builder /opt /opt/
+
+# Install libs we need
+RUN set -eux; \
+	true "Installing build dependencies"; \
+# from https://git.alpinelinux.org/aports/tree/main/nodejs/APKBUILD
+	apk add --no-cache \
+		ca-certificates \
+		ada \
+		base64 \
+		brotli \
+		c-ares \
+		icu \
+		libuv \
+		nghttp2 \
+		nghttp3 \
+		ngtcp2 \
+		openssl \
+		py3-jinja2 \
+		python3 \
+		samurai \
+		zlib
+
 # Adjust flexible docker containers as this is not a daemon-based image
 RUN set -eux; \
+	ls -la /opt; \
 	# Set up this language so it can be pulled into other images
 	echo "# NodeJS $NODEJS_VER" > "/opt/nodejs-$NODEJS_VER/ld-musl-x86_64.path"; \
 	echo "/opt/nodejs-$NODEJS_VER/lib" >> "/opt/nodejs-$NODEJS_VER/ld-musl-x86_64.path"; \
@@ -138,6 +170,14 @@ RUN set -eux; \
 	# Remove things we dont need
 	rm -f /usr/local/share/flexible-docker-containers/tests.d/40-crond.sh; \
 	rm -f /usr/local/share/flexible-docker-containers/tests.d/90-healthcheck.sh
+
+RUN set -eux; \
+	true "Test"; \
+# Test
+	export PATH="$(cat /opt/nodejs-*/PATH):$PATH"; \
+	node -e 'console.log("Hello, world!")'; \
+	node -e "require('assert').equal(process.versions.node, '$NODEJS_VER')"; \
+	du -hs /opt/nodejs-$NODEJS_VER
 
 # NodeJS
 COPY usr/local/share/flexible-docker-containers/init.d/41-nodejs.sh /usr/local/share/flexible-docker-containers/init.d
