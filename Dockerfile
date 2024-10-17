@@ -23,7 +23,7 @@ FROM registry.conarx.tech/containers/alpine/edge AS nodejs-builder
 
 
 # LTS - https://nodejs.org/en/about/previous-releases
-ENV NODEJS_VER=22.9.0
+ENV NODEJS_VER=22.10.0
 
 
 # Copy build patches
@@ -129,7 +129,7 @@ LABEL org.opencontainers.image.version="edge"
 LABEL org.opencontainers.image.base.name="registry.conarx.tech/containers/alpine/edge"
 
 # LTS - https://nodejs.org/en/about/previous-releases
-ENV NODEJS_VER=22.9.0
+ENV NODEJS_VER=22.10.0
 
 ENV FDC_DISABLE_SUPERVISORD=true
 ENV FDC_QUIET=true
@@ -166,7 +166,7 @@ RUN set -eux; \
 	echo "/opt/nodejs-$NODEJS_VER/lib" >> "/opt/nodejs-$NODEJS_VER/ld-musl-x86_64.path"; \
 	echo "/opt/nodejs-$NODEJS_VER/bin" > "/opt/nodejs-$NODEJS_VER/PATH"; \
 	# Set up library search path
-	cat /opt/nodejs-$NODEJS_VER/ld-musl-x86_64.path >> /etc/ld-musl-x86_64.path; \
+	cat "/opt/nodejs-$NODEJS_VER/ld-musl-x86_64.path" >> /etc/ld-musl-x86_64.path; \
 	# Remove things we dont need
 	rm -f /usr/local/share/flexible-docker-containers/tests.d/40-crond.sh; \
 	rm -f /usr/local/share/flexible-docker-containers/tests.d/90-healthcheck.sh
