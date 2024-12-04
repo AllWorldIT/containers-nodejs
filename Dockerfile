@@ -42,7 +42,6 @@ RUN set -eux; \
 		brotli-dev \
 		c-ares-dev \
 		icu-dev \
-		libuv-dev \
 		linux-headers \
 		nghttp2-dev \
 		nghttp3-dev \
@@ -83,7 +82,6 @@ RUN set -eux; \
 		--ninja \
 		--shared-brotli \
 		--shared-cares \
-		--shared-libuv \
 		--shared-nghttp2 \
 		--shared-nghttp3 \
 		--shared-ngtcp2 \
@@ -148,7 +146,6 @@ RUN set -eux; \
 		brotli \
 		c-ares \
 		icu \
-		libuv \
 		nghttp2 \
 		nghttp3 \
 		ngtcp2 \
