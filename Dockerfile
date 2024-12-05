@@ -23,7 +23,7 @@ FROM registry.conarx.tech/containers/alpine/3.20 AS nodejs-builder
 
 
 # LTS - https://nodejs.org/en/about/previous-releases
-ENV NODEJS_VER=22.11.0
+ENV NODEJS_VER=22.12.0
 
 
 # Copy build patches
@@ -42,7 +42,6 @@ RUN set -eux; \
 		brotli-dev \
 		c-ares-dev \
 		icu-dev \
-		libuv-dev \
 		linux-headers \
 		nghttp2-dev \
 		nghttp3-dev \
@@ -83,7 +82,6 @@ RUN set -eux; \
 		--ninja \
 		--shared-brotli \
 		--shared-cares \
-		--shared-libuv \
 		--shared-nghttp2 \
 		--shared-nghttp3 \
 		--shared-ngtcp2 \
@@ -129,7 +127,7 @@ LABEL org.opencontainers.image.version="3.20"
 LABEL org.opencontainers.image.base.name="registry.conarx.tech/containers/alpine/3.20"
 
 # LTS - https://nodejs.org/en/about/previous-releases
-ENV NODEJS_VER=22.11.0
+ENV NODEJS_VER=22.12.0
 
 ENV FDC_DISABLE_SUPERVISORD=true
 ENV FDC_QUIET=true
@@ -148,7 +146,6 @@ RUN set -eux; \
 		brotli \
 		c-ares \
 		icu \
-		libuv \
 		nghttp2 \
 		nghttp3 \
 		ngtcp2 \
