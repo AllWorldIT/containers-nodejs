@@ -23,7 +23,7 @@ FROM registry.conarx.tech/containers/alpine/3.21 AS nodejs-builder
 
 
 # LTS - https://nodejs.org/en/about/previous-releases
-ENV NODEJS_VER=22.12.0
+ENV NODEJS_VER=22.13.1
 
 
 # Copy build patches
@@ -127,7 +127,7 @@ LABEL org.opencontainers.image.version		= "3.21"
 LABEL org.opencontainers.image.base.name	= "registry.conarx.tech/containers/alpine/3.21"
 
 # LTS - https://nodejs.org/en/about/previous-releases
-ENV NODEJS_VER=22.12.0
+ENV NODEJS_VER=22.13.1
 
 ENV FDC_DISABLE_SUPERVISORD=true
 ENV FDC_QUIET=true
