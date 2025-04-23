@@ -23,7 +23,7 @@ FROM registry.conarx.tech/containers/alpine/edge AS nodejs-builder
 
 
 # LTS - https://nodejs.org/en/about/previous-releases
-ENV NODEJS_VER=22.14.0
+ENV NODEJS_VER=22.15.0
 
 
 # Copy build patches
@@ -93,7 +93,9 @@ RUN set -eux; \
 		"$@"; \
 	\
 # Build, must build without -j or it will fail
-	nice -n 20 make -l 8 BUILDTYPE=Release; \
+	# Set JOBS to min(nproc, 8)
+	JOBS=$(( $(nproc) > 8 ? 8 : $(nproc) )); \
+	nice -n 20 make -j$JOBS BUILDTYPE=Release; \
 # Test
 	./node -e 'console.log("Hello, world!")'; \
 	./node -e "require('assert').equal(process.versions.node, '$NODEJS_VER')"; \
@@ -127,7 +129,7 @@ LABEL org.opencontainers.image.version		= "edge"
 LABEL org.opencontainers.image.base.name	= "registry.conarx.tech/containers/alpine/edge"
 
 # LTS - https://nodejs.org/en/about/previous-releases
-ENV NODEJS_VER=22.14.0
+ENV NODEJS_VER=22.15.0
 
 ENV FDC_DISABLE_SUPERVISORD=true
 ENV FDC_QUIET=true
