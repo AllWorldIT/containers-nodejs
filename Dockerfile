@@ -93,7 +93,9 @@ RUN set -eux; \
 		"$@"; \
 	\
 # Build, must build without -j or it will fail
-	nice -n 20 make -l 8 BUILDTYPE=Release; \
+	# Set JOBS to min(nproc, 8)
+	JOBS=$(( $(nproc) > 8 ? 8 : $(nproc) )); \
+	nice -n 20 make -j$JOBS BUILDTYPE=Release; \
 # Test
 	./node -e 'console.log("Hello, world!")'; \
 	./node -e "require('assert').equal(process.versions.node, '$NODEJS_VER')"; \
