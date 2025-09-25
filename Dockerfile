@@ -23,7 +23,7 @@ FROM registry.conarx.tech/containers/alpine/edge AS nodejs-builder
 
 
 # LTS - https://nodejs.org/en/about/previous-releases
-ENV NODEJS_VER=22.18.0
+ENV NODEJS_VER=22.20.0
 
 
 # Copy build patches
@@ -129,7 +129,7 @@ LABEL org.opencontainers.image.version		= "edge"
 LABEL org.opencontainers.image.base.name	= "registry.conarx.tech/containers/alpine/edge"
 
 # LTS - https://nodejs.org/en/about/previous-releases
-ENV NODEJS_VER=22.18.0
+ENV NODEJS_VER=22.20.0
 
 ENV FDC_DISABLE_SUPERVISORD=true
 ENV FDC_QUIET=true
